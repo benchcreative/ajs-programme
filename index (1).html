@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AJ's Programme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,700;1,800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #F3C716;
+    --yellow-dark: #c9a410;
+    --black: #080808;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --surface3: #222222;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.15);
+    --text: #ffffff;
+    --text-muted: rgba(255,255,255,0.5);
+    --text-dim: rgba(255,255,255,0.25);
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SPLASH SCREEN */
+  .splash {
+    position: fixed; inset: 0;
+    background: var(--black);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.4s ease;
+  }
+  .splash.hidden { opacity: 0; pointer-events: none; }
+
+  .splash-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 72px;
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: -2px;
+    line-height: 1;
+    text-align: center;
+  }
+  .splash-logo span { color: var(--yellow); }
+  .splash-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .splash-bar {
+    width: 120px; height: 2px;
+    background: var(--surface3);
+    margin-top: 40px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .splash-bar-fill {
+    height: 100%;
+    background: var(--yellow);
+    width: 0%;
+    animation: load 1.2s ease forwards;
+  }
+  @keyframes load { to { width: 100%; } }
+
+  /* APP */
+  .app { display: none; flex-direction: column; min-height: 100vh; padding-bottom: 80px; }
+  .app.visible { display: flex; }
+
+  /* HEADER */
+  .header {
+    background: var(--black);
+    padding: 16px 16px 0;
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px; font-weight: 800; font-style: italic;
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+  .logo span { color: var(--yellow); }
+  .header-stats { display: flex; gap: 12px; }
+  .header-stat {
+    text-align: right;
+  }
+  .header-stat-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px; font-weight: 700;
+    color: var(--yellow);
+    line-height: 1;
+  }
+  .header-stat-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* DAY TABS */
+  .day-tabs {
+    display: flex; gap: 4px;
+    overflow-x: auto; padding-bottom: 0;
+    scrollbar-width: none;
+    margin: 0 -16px; padding: 0 16px 0;
+  }
+  .day-tabs::-webkit-scrollbar { display: none; }
+  .day-tab {
+    flex-shrink: 0;
+    padding: 10px 16px 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: none; border: none;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.15s;
+  }
+  .day-tab::after {
+    content: '';
+    position: absolute; bottom: 0; left: 16px; right: 16px;
+    height: 2px; background: transparent;
+    transition: background 0.15s;
+  }
+  .day-tab.active { color: var(--yellow); }
+  .day-tab.active::after { background: var(--yellow); }
+  .day-tab.done { color: rgba(255,255,255,0.35); }
+  .day-tab.done::after { background: rgba(255,255,255,0.15); }
+
+  /* SESSION HEADER */
+  .session-header {
+    padding: 20px 16px 12px;
+    display: flex; align-items: flex-end; justify-content: space-between;
+  }
+  .session-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px; font-weight: 800; font-style: italic;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .session-title span { color: var(--yellow); }
+  .session-meta {
+    font-size: 12px; color: var(--text-muted);
+    text-align: right; padding-bottom: 4px;
+  }
+
+  /* PROGRESS STRIP */
+  .progress-strip {
+    margin: 0 16px 16px;
+    height: 3px;
+    background: var(--surface3);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--yellow);
+    transition: width 0.4s ease;
+    border-radius: 2px;
+  }
+
+  /* EXERCISE CARD */
+  .exercise-card {
+    margin: 0 16px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .exercise-card.complete {
+    border-color: rgba(243,199,22,0.3);
+  }
+
+  .exercise-header {
+    padding: 14px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+  .exercise-header:active { background: var(--surface2); }
+
+  .ex-left {}
+  .ex-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 17px; font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
+  }
+  .ex-type {
+    font-size: 11px; color: var(--text-muted);
+    margin-top: 2px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .ex-right { display: flex; align-items: center; gap: 8px; }
+
+  .badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 4px;
+  }
+  .badge-done { background: rgba(243,199,22,0.15); color: var(--yellow); }
+  .badge-progress { background: rgba(100,220,100,0.12); color: #7ddc7d; }
+  .badge-sets { background: var(--surface3); color: var(--text-muted); }
+
+  .chevron {
+    color: var(--text-dim);
+    font-size: 10px;
+    transition: transform 0.2s;
+    margin-left: 4px;
+  }
+  .chevron.open { transform: rotate(90deg); color: var(--yellow); }
+
+  /* EXERCISE BODY */
+  .exercise-body {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 14px 16px;
+  }
+  .exercise-body.open { display: block; }
+
+  .sets-header {
+    display: grid;
+    grid-template-columns: 64px 1fr 1fr 36px;
+    gap: 8px; margin-bottom: 10px;
+  }
+  .sets-header span {
+    font-size: 10px; font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .sets-header span:last-child { text-align: center; }
+
+  .set-row {
+    display: grid;
+    grid-template-columns: 64px 1fr 1fr 36px;
+    gap: 8px; align-items: center;
+    margin-bottom: 8px;
+  }
+  .set-label {
+    font-size: 11px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .set-label.warmup { color: rgba(243,199,22,0.5); }
+
+  .set-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 6px;
+    font-size: 15px; font-weight: 600;
+    font-family: 'Barlow Condensed', sans-serif;
+    color: var(--text);
+    text-align: center;
+    width: 100%;
+    transition: border-color 0.15s;
+    -moz-appearance: textfield;
+  }
+  .set-input::-webkit-outer-spin-button,
+  .set-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .set-input:focus {
+    outline: none;
+    border-color: var(--yellow);
+    background: var(--surface3);
+  }
+  .set-input.filled { border-color: rgba(255,255,255,0.2); }
+
+  .set-check {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-strong);
+    background: var(--surface2);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    transition: all 0.15s;
+    margin: 0 auto;
+  }
+  .set-check.checked {
+    background: var(--yellow);
+    border-color: var(--yellow);
+    color: var(--black);
+  }
+
+  .add-set-btn {
+    width: 100%; margin-top: 8px;
+    padding: 8px;
+    background: none;
+    border: 1px dashed var(--border-strong);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 12px; font-weight: 600;
+    font-family: 'Barlow', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .add-set-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+
+  /* LAST SESSION + PROGRESS */
+  .last-session {
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .last-session-label {
+    font-size: 10px; font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .last-session-sets { display: flex; flex-wrap: wrap; gap: 6px; }
+  .last-set-pill {
+    background: var(--surface3);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .progress-hint {
+    margin-top: 10px;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600;
+    color: #7ddc7d;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .progress-hint::before {
+    content: '▲';
+    font-size: 9px;
+  }
+
+  /* BOTTOM BAR */
+  .bottom-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    padding: 12px 16px;
+    background: var(--black);
+    border-top: 1px solid var(--border);
+    display: flex; gap: 10px;
+    z-index: 100;
+  }
+  .btn {
+    flex: 1; padding: 14px;
+    border-radius: var(--radius);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px; font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: none;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-outline {
+    background: none;
+    border: 1px solid var(--border-strong);
+    color: var(--text-muted);
+    flex: 0.6;
+  }
+  .btn-primary {
+    background: var(--yellow);
+    color: var(--black);
+    flex: 1.4;
+  }
+  .btn-primary:hover { background: #f5d030; }
+
+  /* SECTION DIVIDER */
+  .section-divider {
+    margin: 4px 16px 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-divider-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+  .section-divider-line {
+    flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--yellow); color: var(--black);
+    padding: 10px 20px; border-radius: 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    opacity: 0; transition: opacity 0.25s;
+    pointer-events: none; z-index: 9999;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; }
+
+  /* HISTORY OVERLAY */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    display: none; flex-direction: column;
+  }
+  .overlay.open { display: flex; }
+  .overlay-header {
+    padding: 20px 16px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface);
+  }
+  .overlay-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px; font-weight: 800; font-style: italic;
+    text-transform: uppercase;
+  }
+  .overlay-title span { color: var(--yellow); }
+  .overlay-close {
+    background: var(--surface3); border: none;
+    color: var(--text); width: 36px; height: 36px;
+    border-radius: 50%; cursor: pointer;
+    font-size: 18px; display: flex; align-items: center; justify-content: center;
+  }
+  .overlay-body { flex: 1; overflow-y: auto; padding: 16px; background: var(--black); }
+  .history-empty {
+    text-align: center; padding: 60px 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px; font-weight: 700;
+    color: var(--text-dim); text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .history-entry {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .history-entry-header {
+    padding: 12px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .history-date {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .history-day-label {
+    font-size: 11px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+  .history-entry-body { padding: 12px 14px; }
+  .history-ex {
+    margin-bottom: 10px;
+  }
+  .history-ex-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    margin-bottom: 4px;
+    color: var(--text-muted);
+  }
+  .history-ex-sets { display: flex; flex-wrap: wrap; gap: 5px; }
+  .history-set-pill {
+    background: var(--surface3);
+    border-radius: 6px; padding: 3px 9px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: var(--text);
+  }
+
+  /* PB indicator */
+  .pb-star {
+    color: var(--yellow);
+    font-size: 10px; margin-left: 4px;
+  }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="splash-logo">AJ'S<br><span>PROGRAMME</span></div>
+  <div class="splash-sub">Upper body · 3+1 split</div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+
+  <div class="header">
+    <div class="header-top">
+      <div class="logo">AJ'S <span>PROGRAMME</span></div>
+      <div class="header-stats">
+        <div class="header-stat">
+          <div class="header-stat-val" id="hdr-week">1</div>
+          <div class="header-stat-label">Week</div>
+        </div>
+        <div class="header-stat">
+          <div class="header-stat-val" id="hdr-sessions">0</div>
+          <div class="header-stat-label">Sessions</div>
+        </div>
+      </div>
+    </div>
+    <div class="day-tabs" id="day-tabs"></div>
+  </div>
+
+  <div class="session-header">
+    <div>
+      <div class="session-title" id="session-title"></div>
+    </div>
+    <div class="session-meta" id="session-meta"></div>
+  </div>
+
+  <div class="progress-strip">
+    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+
+  <div id="exercises-container"></div>
+
+  <button onclick="openHistory()" style="margin: 4px 16px 16px; width: calc(100% - 32px); padding: 12px; background: none; border: 1px solid var(--border-strong); border-radius: var(--radius); color: var(--text-muted); font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;">
+    View progress history
+  </button>
+
+</div>
+
+<div class="bottom-bar">
+  <button class="btn btn-outline" onclick="clearSession()">Clear</button>
+  <button class="btn btn-primary" onclick="saveSession()">Save session</button>
+</div>
+
+<!-- HISTORY OVERLAY -->
+<div class="overlay" id="history-overlay">
+  <div class="overlay-header">
+    <div class="overlay-title">Progress <span>History</span></div>
+    <button class="overlay-close" onclick="closeHistory()">✕</button>
+  </div>
+  <div class="overlay-body" id="history-body"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DAYS = [
+  {
+    id:'d1', name:'Day 1', label:'Chest', label2:'+ Biceps',
+    exercises:[
+      {id:'bench',name:'Barbell bench press',type:'Compound · Chest',sets:[{t:'Warm up'},{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'incline_db',name:'Incline dumbbell press',type:'Hypertrophy · Chest',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'high_low',name:'High to low cable',type:'Isolation · Chest',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'bayesian',name:'Bayesian cable curl',type:'Isolation · Biceps',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'db_curl',name:'Dumbbell curls',type:'Hypertrophy · Biceps',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'curl_machine',name:'Arm curl machine',type:'Isolation · Biceps',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+    ]
+  },
+  {
+    id:'d2', name:'Day 2', label:'Back', label2:'+ Triceps',
+    exercises:[
+      {id:'lat_single',name:'Lat pulldown (single arm)',type:'Unilateral · Back',sets:[{t:'Warm up'},{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'seated_row_v',name:'Seated row (V bar)',type:'Compound · Back',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'tbar',name:'T-bar row',type:'Compound · Back',sets:[{t:'Warm up'},{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'pushdown_horse',name:'Tricep pushdown (horseshoe)',type:'Compound · Triceps',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'rope_push',name:'Tricep rope pushdown',type:'Isolation · Triceps',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'overhead_ez',name:'Overhead cable (EZ bar)',type:'Isolation · Triceps',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+    ]
+  },
+  {
+    id:'d3', name:'Day 3', label:'Shoulders', label2:'+ Arms',
+    exercises:[
+      {id:'ohp_db',name:'Overhead press (dumbbell)',type:'Compound · Shoulders',sets:[{t:'Warm up'},{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'lat_raise_db',name:'Lateral raise (single arm)',type:'Isolation · Shoulders',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'lat_raise_cable',name:'Cable lateral raise',type:'Isolation · Shoulders',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'bayesian_d3',name:'Bayesian cable curl',type:'Isolation · Biceps',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'hammer',name:'Dumbbell hammer curls',type:'Hypertrophy · Biceps',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'rope_push_d3',name:'Tricep rope pushdown',type:'Isolation · Triceps',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+    ]
+  },
+  {
+    id:'d4', name:'Day 4', label:'Chest', label2:'+ Back (opt)',
+    exercises:[
+      {id:'smith_inc',name:'Smith machine incline',type:'Compound · Chest',sets:[{t:'Warm up'},{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'lat_vbar',name:'Lat pulldown (V bar)',type:'Compound · Back',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'seated_wide',name:'Seated row (wide grip)',type:'Compound · Back',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+      {id:'low_high',name:'Low to high cable',type:'Isolation · Chest',sets:[{t:'Working'},{t:'Working'},{t:'Working'}]},
+    ]
+  }
+];
+
+let currentDay = 0;
+let session = {};
+let history = [];
+let dayExercises = {};
+
+function load() {
+  try {
+    const s = localStorage.getItem('ajs_session');
+    if (s) session = JSON.parse(s);
+    const h = localStorage.getItem('ajs_history');
+    if (h) history = JSON.parse(h);
+    const d = localStorage.getItem('ajs_day');
+    if (d !== null) currentDay = parseInt(d);
+    const e = localStorage.getItem('ajs_exercises');
+    if (e) dayExercises = JSON.parse(e);
+  } catch(e) {}
+  DAYS.forEach(day => {
+    if (dayExercises[day.id]) {
+      day.exercises = dayExercises[day.id];
+    }
+  });
+}
+
+function save() {
+  try {
+    localStorage.setItem('ajs_session', JSON.stringify(session));
+    localStorage.setItem('ajs_history', JSON.stringify(history));
+    localStorage.setItem('ajs_day', currentDay.toString());
+    DAYS.forEach(day => { dayExercises[day.id] = day.exercises; });
+    localStorage.setItem('ajs_exercises', JSON.stringify(dayExercises));
+  } catch(e) {}
+}
+
+function key(dayId, exId, si, f) { return `${dayId}_${exId}_${si}_${f}`; }
+
+function getLastForEx(exId) {
+  for (let i = history.length - 1; i >= 0; i--) {
+    if (history[i].ex && history[i].ex[exId]) return history[i].ex[exId];
+  }
+  return null;
+}
+
+function getWeek() {
+  if (!history.length) return 1;
+  const first = new Date(history[0].date);
+  const now = new Date();
+  return Math.floor((now - first) / (7*24*60*60*1000)) + 1;
+}
+
+function getProgress() {
+  const day = DAYS[currentDay];
+  let total = 0, done = 0;
+  day.exercises.forEach(ex => {
+    ex.sets.forEach((s, si) => {
+      total++;
+      if (session[key(day.id, ex.id, si, 'done')]) done++;
+    });
+  });
+  return total ? Math.round((done/total)*100) : 0;
+}
+
+function checkReadyToProgress(exId, dayId, sets) {
+  const last = getLastForEx(exId);
+  if (!last || !last.sets) return false;
+  const working = sets.filter((s,si) => s.t === 'Working');
+  if (working.length < 2) return false;
+  const allSetsHaveData = working.every((s,si) => {
+    const actualSi = sets.indexOf(s);
+    return session[key(dayId, exId, actualSi, 'reps')] && session[key(dayId, exId, actualSi, 'done')];
+  });
+  if (!allSetsHaveData) return false;
+  const allHit10 = working.every((s,si) => {
+    const actualSi = sets.indexOf(s);
+    return parseInt(session[key(dayId, exId, actualSi, 'reps')] || 0) >= 10;
+  });
+  return allHit10;
+}
+
+function renderTabs() {
+  const c = document.getElementById('day-tabs');
+  c.innerHTML = DAYS.map((d,i) => {
+    const done = history.some(h => h.dayId === d.id);
+    const cls = i === currentDay ? 'active' : done ? 'done' : '';
+    return `<button class="day-tab ${cls}" onclick="switchDay(${i})">${d.name}</button>`;
+  }).join('');
+}
+
+function renderHeader() {
+  document.getElementById('hdr-week').textContent = getWeek();
+  document.getElementById('hdr-sessions').textContent = history.length;
+}
+
+function renderSession() {
+  const day = DAYS[currentDay];
+  document.getElementById('session-title').innerHTML = `${day.label} <span>${day.label2}</span>`;
+  document.getElementById('session-meta').textContent = `${day.exercises.length} exercises`;
+  document.getElementById('progress-fill').style.width = getProgress() + '%';
+
+  const c = document.getElementById('exercises-container');
+  const groups = {};
+  day.exercises.forEach(ex => {
+    const g = ex.type.split(' · ')[1] || 'Other';
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(ex);
+  });
+
+  let html = '';
+  Object.entries(groups).forEach(([group, exs]) => {
+    html += `<div class="section-divider"><span class="section-divider-label">${group}</span><div class="section-divider-line"></div></div>`;
+    exs.forEach(ex => {
+      const isOpen = session[`open_${day.id}_${ex.id}`] || false;
+      const last = getLastForEx(ex.id);
+      const ready = checkReadyToProgress(ex.id, day.id, ex.sets);
+      const doneSets = ex.sets.filter((s,si) => session[key(day.id, ex.id, si, 'done')]).length;
+      const allDone = doneSets === ex.sets.length;
+
+      let setsHtml = `<div class="sets-header" style="grid-template-columns:56px 1fr 1fr 36px 24px"><span>Set</span><span>Weight (kg)</span><span>Reps</span><span></span><span></span></div>`;
+      ex.sets.forEach((s, si) => {
+        const w = session[key(day.id, ex.id, si, 'w')] || '';
+        const r = session[key(day.id, ex.id, si, 'r')] || '';
+        const done = session[key(day.id, ex.id, si, 'done')] || false;
+        const isWarmup = s.t === 'Warm up';
+        const canRemove = ex.sets.length > 1;
+        setsHtml += `
+          <div class="set-row" style="grid-template-columns:56px 1fr 1fr 36px 24px">
+            <span class="set-label ${isWarmup ? 'warmup' : ''}">${s.t}</span>
+            <input class="set-input ${w ? 'filled' : ''}" type="number" inputmode="decimal" placeholder="—" value="${w}" step="2.5"
+              onchange="updateKey('${key(day.id, ex.id, si, 'w')}', this.value); this.classList.toggle('filled', !!this.value)"
+              oninput="updateKey('${key(day.id, ex.id, si, 'w')}', this.value); this.classList.toggle('filled', !!this.value)" />
+            <input class="set-input ${r ? 'filled' : ''}" type="number" inputmode="numeric" placeholder="—" value="${r}"
+              onchange="updateKey('${key(day.id, ex.id, si, 'r')}', this.value); updateProgress(); this.classList.toggle('filled', !!this.value)"
+              oninput="updateKey('${key(day.id, ex.id, si, 'r')}', this.value); updateProgress(); this.classList.toggle('filled', !!this.value)" />
+            <div class="set-check ${done ? 'checked' : ''}" onclick="toggleDone('${day.id}','${ex.id}',${si})">
+              ${done ? '✓' : ''}
+            </div>
+            <div onclick="${canRemove ? `removeSet('${day.id}','${ex.id}',${si})` : ''}" style="color:${canRemove ? 'rgba(255,255,255,0.2)' : 'transparent'};cursor:${canRemove ? 'pointer' : 'default'};font-size:16px;text-align:center;line-height:32px;transition:color 0.15s" onmouseover="this.style.color='${canRemove ? '#ff5555' : 'transparent'}'" onmouseout="this.style.color='${canRemove ? 'rgba(255,255,255,0.2)' : 'transparent'}'">✕</div>
+          </div>`;
+      });
+
+      setsHtml += `<button class="add-set-btn" onclick="addSet('${day.id}','${ex.id}')">+ Add set</button>`;
+
+      if (last && last.sets && last.sets.length) {
+        const pills = last.sets.filter(s => s.w && s.r).map(s => `<div class="last-set-pill">${s.w}kg × ${s.r}</div>`).join('');
+        if (pills) setsHtml += `<div class="last-session"><div class="last-session-label">Last session</div><div class="last-session-sets">${pills}</div></div>`;
+      }
+      if (ready) setsHtml += `<div class="progress-hint">Ready to increase weight next session</div>`;
+
+      html += `
+        <div class="exercise-card ${allDone ? 'complete' : ''}">
+          <div class="exercise-header" onclick="toggleEx('${day.id}','${ex.id}')">
+            <div class="ex-left">
+              <div class="ex-name">${ex.name}</div>
+              <div class="ex-type">${ex.type}</div>
+            </div>
+            <div class="ex-right">
+              ${ready ? '<span class="badge badge-progress">Progress</span>' : ''}
+              ${allDone ? '<span class="badge badge-done">Done</span>' : `<span class="badge badge-sets">${doneSets}/${ex.sets.length}</span>`}
+              <span class="chevron ${isOpen ? 'open' : ''}">▶</span>
+            </div>
+          </div>
+          <div class="exercise-body ${isOpen ? 'open' : ''}">${setsHtml}</div>
+        </div>`;
+    });
+  });
+
+  c.innerHTML = html;
+}
+
+function updateKey(k, v) { session[k] = v; save(); }
+
+function toggleDone(dayId, exId, si) {
+  const k = key(dayId, exId, si, 'done');
+  session[k] = !session[k];
+  save();
+  renderSession();
+}
+
+function toggleEx(dayId, exId) {
+  const k = `open_${dayId}_${exId}`;
+  session[k] = !session[k];
+  renderSession();
+}
+
+function addSet(dayId, exId) {
+  const day = DAYS.find(d => d.id === dayId);
+  const ex = day.exercises.find(e => e.id === exId);
+  ex.sets.push({t:'Working'});
+  save();
+  renderSession();
+}
+
+function removeSet(dayId, exId, si) {
+  const day = DAYS.find(d => d.id === dayId);
+  const ex = day.exercises.find(e => e.id === exId);
+  if (ex.sets.length <= 1) return;
+  ex.sets.splice(si, 1);
+  ['w','r','done'].forEach(f => delete session[dayId+'_'+exId+'_'+si+'_'+f]);
+  save();
+  renderSession();
+}
+
+function updateProgress() {
+  document.getElementById('progress-fill').style.width = getProgress() + '%';
+}
+
+function switchDay(i) {
+  currentDay = i;
+  save();
+  renderTabs();
+  renderSession();
+}
+
+function clearSession() {
+  const day = DAYS[currentDay];
+  const keysToDelete = Object.keys(session).filter(k => k.startsWith(day.id + '_'));
+  keysToDelete.forEach(k => delete session[k]);
+  save();
+  renderSession();
+  showToast('Session cleared');
+}
+
+function saveSession() {
+  const day = DAYS[currentDay];
+  const ex = {};
+  day.exercises.forEach(e => {
+    const sets = e.sets.map((s,si) => ({
+      t: s.t,
+      w: session[key(day.id, e.id, si, 'w')] || '',
+      r: session[key(day.id, e.id, si, 'r')] || '',
+      done: session[key(day.id, e.id, si, 'done')] || false
+    })).filter(s => s.w || s.r);
+    if (sets.length) ex[e.id] = {name: e.name, sets};
+  });
+
+  history.push({
+    date: new Date().toISOString(),
+    dayId: day.id,
+    dayName: day.name + ' — ' + day.label + ' ' + day.label2,
+    ex
+  });
+  save();
+  renderTabs();
+  renderHeader();
+  showToast('Session saved ✓');
+}
+
+function openHistory() {
+  document.getElementById('history-overlay').classList.add('open');
+  renderHistory();
+}
+
+function closeHistory() {
+  document.getElementById('history-overlay').classList.remove('open');
+}
+
+function renderHistory() {
+  const body = document.getElementById('history-body');
+  if (!history.length) {
+    body.innerHTML = '<div class="history-empty">No sessions logged yet</div>';
+    return;
+  }
+  const entries = [...history].reverse().slice(0, 20);
+  body.innerHTML = entries.map(h => {
+    const d = new Date(h.date);
+    const dateStr = d.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'});
+    const exHtml = Object.values(h.ex || {}).map(e => {
+      const pills = e.sets.filter(s => s.w && s.r).map(s => `<div class="history-set-pill">${s.w}kg × ${s.r}</div>`).join('');
+      return `<div class="history-ex"><div class="history-ex-name">${e.name}</div><div class="history-ex-sets">${pills}</div></div>`;
+    }).join('');
+    return `
+      <div class="history-entry">
+        <div class="history-entry-header">
+          <div>
+            <div class="history-date">${dateStr}</div>
+            <div class="history-day-label">${h.dayName || ''}</div>
+          </div>
+        </div>
+        <div class="history-entry-body">${exHtml || '<span style="font-size:12px;color:var(--text-dim)">No data logged</span>'}</div>
+      </div>`;
+  }).join('');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// Init
+load();
+setTimeout(() => {
+  document.getElementById('splash').classList.add('hidden');
+  document.getElementById('app').classList.add('visible');
+  renderTabs();
+  renderHeader();
+  renderSession();
+}, 1400);
+</script>
+</body>
+</html>
