@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>AJ's Programme</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Programme">
+<meta name="theme-color" content="#080808">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,700;1,800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -182,6 +187,67 @@
   /* TOAST */
   .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--black);padding:10px 20px;border-radius:20px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;opacity:0;transition:opacity 0.25s;pointer-events:none;z-index:9999;white-space:nowrap}
   .toast.show{opacity:1}
+
+  /* WINTER POT */
+  .header-stat.pot-stat{cursor:pointer}
+  .pot-strip{margin:14px 16px 0;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);cursor:pointer}
+  .pot-strip-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .pot-dots{display:flex;gap:5px}
+  .pot-dot{width:22px;height:22px;border-radius:6px;border:1.5px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:var(--text-dim)}
+  .pot-dot.full{background:var(--accent);border:0;color:var(--black)}
+  .pot-dot.min{border:1.5px solid var(--accent);color:var(--accent)}
+  .pot-dot.today{border-style:solid;border-color:var(--text-muted)}
+  .pot-dot.future{opacity:.4}
+  .pot-count{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;font-style:italic;line-height:1;white-space:nowrap}
+  .pot-count span{color:var(--text-muted);font-size:13px;font-style:normal;font-weight:600}
+  .pot-nudge{font-size:12px;color:var(--text-muted);margin-top:8px}
+  .pot-big{font-family:'Barlow Condensed',sans-serif;font-size:72px;font-weight:800;font-style:italic;line-height:1;color:var(--accent);margin:6px 0 2px}
+  .pot-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px}
+  .pot-card-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px}
+  .pot-bar{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;margin:10px 0 6px}
+  .pot-bar i{display:block;height:100%;background:var(--accent);border-radius:3px}
+  .pot-small{font-size:12px;color:var(--text-muted)}
+  .pot-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+  .pot-stats div{background:var(--surface2);border-radius:8px;padding:10px 6px;text-align:center}
+  .pot-stats b{display:block;font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800}
+  .pot-stats span{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}
+  .pot-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .pot-row:last-child{border-bottom:0}
+  .pot-pos{color:#7ddc7d}.pot-neg{color:#ff6b6b}
+  .pot-min-btn{width:100%;padding:12px;margin-top:10px;background:none;border:1px solid var(--accent);border-radius:var(--radius);color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer}
+  .pot-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .pot-grid label{display:block;font-size:11px;color:var(--text-muted);margin-bottom:4px}
+  .pot-grid input,.pot-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 10px;font-size:14px;font-family:'Barlow',sans-serif;color:var(--text)}
+  .pot-grid input:focus,.pot-input:focus{outline:none;border-color:var(--accent)}
+  /* REST TIMER */
+  .rest{position:fixed;left:12px;right:12px;bottom:76px;z-index:150;background:var(--surface2);border:1px solid var(--border-strong);border-radius:var(--radius-lg);padding:10px 12px;display:none;align-items:center;gap:10px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+  .rest.show{display:flex}
+  .rest.go{border-color:var(--accent);background:var(--surface3)}
+  .rest-time{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:800;font-style:italic;color:var(--accent);min-width:74px;line-height:1}
+  .rest-mid{flex:1;min-width:0}
+  .rest-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em}
+  .rest-bar{height:3px;background:var(--surface);border-radius:2px;overflow:hidden;margin-top:6px}
+  .rest-bar i{display:block;height:100%;background:var(--accent);border-radius:2px}
+  .rest-btn{background:var(--surface);border:1px solid var(--border-strong);color:var(--text);border-radius:8px;padding:8px 10px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+
+  /* PROGRESS */
+  .prog-tabs{display:flex;gap:6px;margin-bottom:14px}
+  .prog-tab{flex:1;padding:9px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer}
+  .prog-tab.active{background:var(--accent);border-color:var(--accent);color:var(--black)}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+  .tile{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px}
+  .tile b{display:block;font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;line-height:1.1}
+  .tile span{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em}
+  .tile em{display:block;font-style:normal;font-size:12px;margin-top:4px}
+  .chart-wrap{position:relative}
+  .chart svg{display:block;width:100%;height:auto;overflow:visible}
+  .chart .hit{cursor:pointer}
+  .chart-tip{min-height:18px;font-size:12px;color:var(--text);margin-top:6px}
+  .chart-tip span{color:var(--text-muted)}
+  .backup-btns{display:flex;gap:8px}
+  .backup-btns button,.backup-btns label{flex:1;text-align:center;padding:10px;border:1px solid var(--border-strong);border-radius:8px;background:none;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer}
+
+  .pot-save{width:100%;margin-top:12px;padding:12px;background:var(--accent);border:0;border-radius:var(--radius);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer}
 </style>
 </head>
 <body>
@@ -208,12 +274,18 @@
             <div class="header-stat-val" id="hdr-sessions">0</div>
             <div class="header-stat-label">Sessions</div>
           </div>
+          <div class="header-stat pot-stat" onclick="openPot()">
+            <div class="header-stat-val" id="hdr-pot">£0</div>
+            <div class="header-stat-label">Pot</div>
+          </div>
         </div>
         <button class="settings-btn" onclick="openSettings()">⚙</button>
       </div>
     </div>
     <div class="day-tabs" id="day-tabs"></div>
   </div>
+
+  <div class="pot-strip" id="pot-strip" onclick="openPot()"></div>
 
   <div class="session-header">
     <div><div class="session-title" id="session-title"></div></div>
@@ -227,22 +299,38 @@
   <div id="exercises-container"></div>
 
   <button onclick="openHistory()" style="margin:4px 16px 16px;width:calc(100% - 32px);padding:12px;background:none;border:1px solid var(--border-strong);border-radius:var(--radius);color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;">
-    View progress history
+    Progress, PBs &amp; history
   </button>
+</div>
+
+<div class="rest" id="rest">
+  <div class="rest-time" id="rest-time">2:00</div>
+  <div class="rest-mid"><div class="rest-label" id="rest-label">Rest</div><div class="rest-bar"><i id="rest-fill"></i></div></div>
+  <button class="rest-btn" onclick="restAdd(30)">+30</button>
+  <button class="rest-btn" onclick="restStop()">Skip</button>
 </div>
 
 <div class="bottom-bar">
   <button class="btn btn-outline" onclick="clearSession()">Clear</button>
-  <button class="btn btn-primary" onclick="saveSession()">Save session</button>
+  <button class="btn btn-primary" onclick="saveSession()">Finish session</button>
 </div>
 
 <!-- HISTORY OVERLAY -->
 <div class="overlay" id="history-overlay">
   <div class="overlay-header">
-    <div class="overlay-title">Progress <span>History</span></div>
+    <div class="overlay-title">Your <span>Progress</span></div>
     <button class="overlay-close" onclick="closeHistory()">✕</button>
   </div>
   <div class="overlay-body" id="history-body"></div>
+</div>
+
+<!-- WINTER POT OVERLAY -->
+<div class="overlay" id="pot-overlay">
+  <div class="overlay-header">
+    <div class="overlay-title">Winter <span>Pot</span></div>
+    <button class="overlay-close" onclick="closePot()">✕</button>
+  </div>
+  <div class="overlay-body" id="pot-body"></div>
 </div>
 
 <!-- SETTINGS PANEL -->
@@ -260,10 +348,25 @@
         <span class="settings-label">Your name</span>
         <input class="settings-input" id="setting-name" type="text" placeholder="e.g. AJ" oninput="applyName(this.value)" />
       </div>
+      <div class="settings-row">
+        <span class="settings-label">Rest timer (seconds)</span>
+        <input class="settings-input" id="setting-rest" type="number" inputmode="numeric" placeholder="120" onchange="settings.rest=Math.max(15,parseInt(this.value)||120);save()" />
+      </div>
       <div style="margin-top:4px">
         <div class="settings-label" style="margin-bottom:10px">Accent colour</div>
         <div class="colour-options" id="colour-options"></div>
       </div>
+    </div>
+
+    <!-- BACKUP -->
+    <div class="settings-section">
+      <div class="settings-section-title">Backup</div>
+      <div class="settings-label" style="margin-bottom:10px;font-size:12px">Everything lives on this phone only. Download a backup now and then so you never lose your history.</div>
+      <div class="backup-btns">
+        <button onclick="exportBackup()">Download backup</button>
+        <label>Restore<input type="file" accept=".json,application/json" style="display:none" onchange="importBackup(this.files[0]);this.value=''"></label>
+      </div>
+      <div class="settings-label" id="backup-last" style="margin-top:8px;font-size:11px"></div>
     </div>
 
     <!-- MANAGE EXERCISES -->
@@ -442,7 +545,7 @@ let DAYS = JSON.parse(JSON.stringify(DEFAULT_DAYS));
 let currentDay = 0;
 let session = {};
 let history = [];
-let settings = { name: 'AJ', colour: '#F3C716' };
+let settings = { name: 'AJ', colour: '#F3C716', rest: 120, lastBackup: null };
 let currentLibCat = 'Chest';
 
 // ─── PERSISTENCE ────────────────────────────────────────────────────
@@ -474,6 +577,8 @@ function openSettings() {
   setTimeout(()=>panel.style.transform='translateX(0)',10);
 
   document.getElementById('setting-name').value = settings.name;
+  document.getElementById('setting-rest').value = settings.rest || 120;
+  document.getElementById('backup-last').textContent = settings.lastBackup ? 'Last backup: '+new Date(settings.lastBackup).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : 'No backup yet';
   renderColours();
   renderManageDaySelect();
   renderManageDay();
@@ -624,7 +729,8 @@ function addLibExercise(exId, dayIdxStr) {
 function key(dayId,exId,si,f){return`${dayId}_${exId}_${si}_${f}`}
 
 function getLastForEx(exId){
-  for(let i=history.length-1;i>=0;i--){ if(history[i].ex&&history[i].ex[exId]) return history[i].ex[exId]; }
+  const today=isoDay(new Date());
+  for(let i=history.length-1;i>=0;i--){ if(isoDay(new Date(history[i].date))===today) continue; if(history[i].ex&&history[i].ex[exId]) return history[i].ex[exId]; }
   return null;
 }
 
@@ -657,10 +763,12 @@ function renderTabs(){
 function renderHeader(){
   document.getElementById('hdr-week').textContent=getWeek();
   document.getElementById('hdr-sessions').textContent=history.length;
+  renderPotStrip();
 }
 
 function renderSession(){
   const day=DAYS[currentDay];
+  resetStaleTicks(day);
   document.getElementById('session-title').innerHTML=`${day.label} <span>${day.label2}</span>`;
   document.getElementById('session-meta').textContent=`${day.exercises.length} exercises`;
   document.getElementById('progress-fill').style.width=getProgress()+'%';
@@ -718,8 +826,109 @@ function renderSession(){
   c.innerHTML=html;
 }
 
-function updateKey(k,v){session[k]=v;save()}
-function toggleDone(dayId,exId,si){const k=key(dayId,exId,si,'done');session[k]=!session[k];save();renderSession()}
+function updateKey(k,v){session[k]=v;session[k.replace(/_(w|r)$/,'_ed')]=isoDay(new Date());save();autoSave(false)}
+function toggleDone(dayId,exId,si){
+  const k=key(dayId,exId,si,'done');session[k]=!session[k];
+  session['date_'+dayId]=isoDay(new Date());
+  save();
+  const r=autoSave(true);
+  renderSession();
+  if(session[k]){
+    if(r&&r.newPBs>0) showToast('PB! +'+money(r.newPBs*pot.settings.pbBonus));
+    const day=DAYS.find(d=>d.id===dayId),ex=day&&day.exercises.find(e=>e.id===exId);
+    if(ex&&!ex.type.includes('Cardio')) restStart();
+  }
+}
+
+// ─── AUTO SAVE ──────────────────────────────────────────────────────
+// Ticked sets are written into today's history entry as you go, so a
+// session counts even if you never press Finish. One entry per day per
+// programme day; ticks reset on a new day but weights stay as a guide.
+function buildEx(day,mode){
+  const ex={};
+  day.exercises.forEach(e=>{
+    const sets=e.sets.map((s,si)=>({t:s.t,w:session[key(day.id,e.id,si,'w')]||'',r:session[key(day.id,e.id,si,'r')]||'',done:session[key(day.id,e.id,si,'done')]||false}))
+      .filter((s,si)=>(s.w||s.r)&&(s.done||(mode==='finish'&&session[key(day.id,e.id,si,'ed')]===isoDay(new Date()))));
+    if(sets.length) ex[e.id]={name:e.name,sets};
+  });
+  return ex;
+}
+function upsertToday(day,ex){
+  const today=isoDay(new Date());
+  const i=history.findIndex(h=>h.dayId===day.id&&isoDay(new Date(h.date))===today);
+  if(!Object.keys(ex).length){ if(i>=0) history.splice(i,1); return; }
+  const entry={date:i>=0?history[i].date:new Date().toISOString(),dayId:day.id,dayName:day.name+' — '+day.label+' '+day.label2,ex};
+  if(i>=0) history[i]=entry; else history.push(entry);
+}
+function autoSave(report){
+  const day=DAYS[currentDay];
+  if(session['date_'+day.id]!==isoDay(new Date())) return null;
+  const before=report?derivePot():null;
+  upsertToday(day,buildEx(day,'auto'));
+  save();renderTabs();renderHeader();
+  if(!report) return null;
+  const after=derivePot();
+  return{gained:after.pot-before.pot,newPBs:after.pbCount-before.pbCount};
+}
+function resetStaleTicks(day){
+  const d=session['date_'+day.id],today=isoDay(new Date());
+  if(d&&d!==today){
+    Object.keys(session).filter(k=>k.startsWith(day.id+'_')&&k.endsWith('_done')).forEach(k=>delete session[k]);
+    delete session['date_'+day.id];save();
+  }
+}
+
+// ─── REST TIMER ─────────────────────────────────────────────────────
+let restEnd=0,restLen=120,restTick=null,wakeLock=null,audioCtx=null;
+function restStart(){
+  restLen=settings.rest||120;restEnd=Date.now()+restLen*1000;
+  try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume()}catch(e){}
+  try{if(navigator.wakeLock&&!wakeLock)navigator.wakeLock.request('screen').then(l=>{wakeLock=l;l.addEventListener('release',()=>{wakeLock=null})}).catch(()=>{})}catch(e){}
+  const el=document.getElementById('rest');el.classList.add('show');el.classList.remove('go');
+  clearInterval(restTick);restTick=setInterval(restUpdate,250);restUpdate();
+}
+function restAdd(s){if(!restEnd)return;restEnd+=s*1000;restLen+=s;restUpdate()}
+function restStop(){clearInterval(restTick);restEnd=0;document.getElementById('rest').classList.remove('show','go')}
+function restUpdate(){
+  const left=Math.max(0,Math.ceil((restEnd-Date.now())/1000));
+  document.getElementById('rest-time').textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');
+  document.getElementById('rest-fill').style.width=(100-left/restLen*100)+'%';
+  document.getElementById('rest-label').textContent=left?'Rest':'Next set';
+  if(!left){
+    clearInterval(restTick);restEnd=0;
+    document.getElementById('rest').classList.add('go');
+    restBeep();try{navigator.vibrate&&navigator.vibrate([300,150,300])}catch(e){}
+    setTimeout(()=>{if(!restEnd)document.getElementById('rest').classList.remove('show','go')},6000);
+  }
+}
+function restBeep(){
+  try{if(!audioCtx)return;[0,0.25,0.5].forEach(t=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=880;o.connect(g);g.connect(audioCtx.destination);
+    g.gain.setValueAtTime(0.0001,audioCtx.currentTime+t);g.gain.exponentialRampToValueAtTime(0.3,audioCtx.currentTime+t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+t+0.18);
+    o.start(audioCtx.currentTime+t);o.stop(audioCtx.currentTime+t+0.2)})}catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&restEnd){restUpdate();if(navigator.wakeLock&&!wakeLock)navigator.wakeLock.request('screen').then(l=>wakeLock=l).catch(()=>{})}});
+
+// ─── BACKUP ─────────────────────────────────────────────────────────
+function exportBackup(){
+  const ex={};DAYS.forEach(d=>{ex[d.id]=d.exercises});
+  const data={app:'ajs-programme',v:1,exported:new Date().toISOString(),history,session,settings,exercises:ex,pot};
+  const blob=new Blob([JSON.stringify(data)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ajs-programme-backup-'+isoDay(new Date())+'.json';
+  document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);
+  settings.lastBackup=new Date().toISOString();save();
+  document.getElementById('backup-last').textContent='Last backup: today';
+}
+function importBackup(file){
+  if(!file)return;const rd=new FileReader();
+  rd.onload=()=>{try{
+    const d=JSON.parse(rd.result);if(d.app!=='ajs-programme'||!Array.isArray(d.history))throw 0;
+    history=d.history;session=d.session||{};settings={...settings,...(d.settings||{})};
+    if(d.exercises)DAYS.forEach(day=>{if(d.exercises[day.id])day.exercises=d.exercises[day.id]});
+    if(d.pot){pot={...pot,...d.pot,settings:{...POT_DEFAULTS,...(d.pot.settings||{})}};savePot()}
+    save();applySettings();renderTabs();renderHeader();renderSession();showToast('Backup restored · '+history.length+' sessions');
+  }catch(e){showToast("That file isn't a backup")}};
+  rd.readAsText(file);
+}
 function toggleEx(dayId,exId){session[`open_${dayId}_${exId}`]=!session[`open_${dayId}_${exId}`];renderSession()}
 function updateProgress(){document.getElementById('progress-fill').style.width=getProgress()+'%'}
 
@@ -750,22 +959,143 @@ function clearSession(){
 
 function saveSession(){
   const day=DAYS[currentDay];
-  const ex={};
-  day.exercises.forEach(e=>{
-    const sets=e.sets.map((s,si)=>({t:s.t,w:session[key(day.id,e.id,si,'w')]||'',r:session[key(day.id,e.id,si,'r')]||'',done:session[key(day.id,e.id,si,'done')]||false})).filter(s=>s.w||s.r);
-    if(sets.length) ex[e.id]={name:e.name,sets};
-  });
-  history.push({date:new Date().toISOString(),dayId:day.id,dayName:day.name+' — '+day.label+' '+day.label2,ex});
-  save();renderTabs();renderHeader();showToast('Session saved ✓');
+  const ex=buildEx(day,'finish');
+  if(!Object.keys(ex).length){showToast('Tick or edit at least one set first');return}
+  upsertToday(day,ex);
+  // Finished: clear today's ticks so the day is fresh next time (weights stay as a guide)
+  Object.keys(session).filter(k=>k.startsWith(day.id+'_')&&k.endsWith('_done')).forEach(k=>delete session[k]);
+  delete session['date_'+day.id];
+  restStop();
+  save();renderTabs();renderHeader();renderSession();
+  const t=isoDay(new Date()),D=derivePot();
+  const earned=D.ledger.filter(x=>x.d===t).reduce((a,x)=>a+x.a,0);
+  const vol=entryVolume({ex});
+  showToast('Done ✓ '+fmtKg(vol)+' lifted'+(earned>0?' · +'+money(earned)+' today':''));
 }
 
-function openHistory(){document.getElementById('history-overlay').classList.add('open');renderHistory()}
+// ─── PROGRESS ───────────────────────────────────────────────────────
+let progTab='overview',progEx=null;
+function openHistory(){document.getElementById('history-overlay').classList.add('open');renderProgress()}
 function closeHistory(){document.getElementById('history-overlay').classList.remove('open')}
+function setProgTab(t){progTab=t;renderProgress()}
+
+function setNums(s){const w=parseFloat(s.w),r=parseInt(s.r,10);return(s.t!=='Cardio'&&w>0&&r>0)?{w,r}:null}
+function entryVolume(h){let v=0;Object.values(h.ex||{}).forEach(e=>(e.sets||[]).forEach(s=>{const n=setNums(s);if(n)v+=n.w*n.r}));return v}
+function fmtKg(v){return v>=1000?(v/1000).toFixed(v>=10000?0:1)+'t':Math.round(v)+'kg'}
+function sortedHistory(){return[...history].sort((a,b)=>a.date<b.date?-1:1)}
+
+// Per exercise: one point per session (top working set by estimated 1RM), with all-time PB flags
+function exerciseSeries(){
+  const out={};
+  sortedHistory().forEach(h=>{
+    const d=isoDay(new Date(h.date));
+    Object.values(h.ex||{}).forEach(e=>{
+      let top=null,vol=0,heavy=0;const sets=[];
+      (e.sets||[]).forEach(s=>{const n=setNums(s);if(!n)return;sets.push(n);vol+=n.w*n.r;heavy=Math.max(heavy,n.w);
+        if(s.t==='Warm up'||n.r>30)return;const v=e1rm(n.w,n.r);if(!top||v>top.v)top={...n,v}});
+      if(!top)return;
+      const k=e.name.trim().toLowerCase();
+      const X=out[k]||(out[k]={name:e.name,pts:[],best:null,heaviest:0,vol:0,pbs:0,last:d});
+      const pb=!!X.best&&top.v>X.best.v+0.01;
+      if(pb)X.pbs++;
+      if(!X.best||top.v>X.best.v)X.best=top;
+      X.heaviest=Math.max(X.heaviest,heavy);X.vol+=vol;X.last=d;
+      X.pts.push({d,top,vol,sets,pb,first:X.pts.length===0});
+    });
+  });
+  return out;
+}
+
+function barChart(data,unit){
+  const W=320,H=150,L=34,B=20,T=8,n=data.length,max=Math.max(1,...data.map(x=>x.v));
+  const step=unit==='n'?Math.max(1,Math.round(niceStep(max))):niceStep(max),top=Math.ceil(max/step)*step,cw=(W-L)/n,bw=Math.max(4,cw-2);
+  let g='';
+  for(let y=0;y<=top;y+=step){const py=T+(H-T-B)*(1-y/top);
+    g+=`<line x1="${L}" x2="${W}" y1="${py}" y2="${py}" stroke="rgba(255,255,255,0.07)"/><text x="${L-6}" y="${py+3}" text-anchor="end" font-size="9" fill="rgba(255,255,255,0.4)">${unit==='kg'?fmtKg(y):y}</text>`}
+  data.forEach((x,i)=>{
+    const x0=L+i*cw+(cw-bw)/2,h=(H-T-B)*(x.v/top),y0=H-B-h,r=Math.min(4,h/2,bw/2);
+    if(h>0)g+=`<path d="M${x0},${H-B} V${y0+r} Q${x0},${y0} ${x0+r},${y0} H${x0+bw-r} Q${x0+bw},${y0} ${x0+bw},${y0+r} V${H-B} Z" fill="var(--accent)" opacity="${x.current?1:0.75}"/>`;
+    if(x.label)g+=`<text x="${x0+bw/2}" y="${H-5}" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.4)">${x.label}</text>`;
+    g+=`<rect class="hit" x="${L+i*cw}" y="${T}" width="${cw}" height="${H-T-B}" fill="transparent" data-tip="${escH(x.tip)}"/>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}">${g}</svg>`;
+}
+function lineChart(pts){
+  const W=320,H=160,L=38,B=20,T=10,n=pts.length;
+  const ys=pts.map(p=>p.y),lo0=Math.min(...ys),hi0=Math.max(...ys),pad=Math.max(2,(hi0-lo0)*0.15);
+  const step=niceStep(hi0-lo0+pad*2),lo=Math.floor((lo0-pad)/step)*step,hi=Math.ceil((hi0+pad)/step)*step;
+  const px=i=>n===1?(L+W)/2:L+8+(W-L-16)*i/(n-1),py=y=>T+(H-T-B)*(1-(y-lo)/(hi-lo||1));
+  let g='';
+  for(let y=lo;y<=hi+1e-9;y+=step)g+=`<line x1="${L}" x2="${W}" y1="${py(y)}" y2="${py(y)}" stroke="rgba(255,255,255,0.07)"/><text x="${L-6}" y="${py(y)+3}" text-anchor="end" font-size="9" fill="rgba(255,255,255,0.4)">${Math.round(y)}</text>`;
+  g+=`<polyline fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${pts.map((p,i)=>px(i)+','+py(p.y)).join(' ')}"/>`;
+  [0,n-1].filter((v,i,a)=>a.indexOf(v)===i).forEach(i=>g+=`<text x="${px(i)}" y="${H-5}" text-anchor="${n===1?'middle':i?'end':'start'}" font-size="9" fill="rgba(255,255,255,0.4)">${niceDay(pts[i].d)}</text>`);
+  pts.forEach((p,i)=>{g+=`<circle cx="${px(i)}" cy="${py(p.y)}" r="${p.pb?5:4}" fill="${p.pb?'var(--accent)':'var(--black)'}" stroke="${p.pb?'var(--black)':'var(--accent)'}" stroke-width="2"/>`;
+    g+=`<circle class="hit" cx="${px(i)}" cy="${py(p.y)}" r="14" fill="transparent" data-tip="${escH(p.tip)}"/>`});
+  return `<svg viewBox="0 0 ${W} ${H}">${g}</svg>`;
+}
+function niceStep(range){const raw=range/3||1,mag=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/mag;return(f<=1?1:f<=2?2:f<=5?5:10)*mag}
+function chartBlock(title,svg,hint){return`<div class="pot-card"><div class="pot-card-title">${title}</div><div class="chart-wrap chart">${svg}<div class="chart-tip"><span>${hint||'Tap a bar for details'}</span></div></div></div>`}
+document.addEventListener('click',e=>{const h=e.target.closest('.hit');if(!h)return;const w=h.closest('.chart-wrap');if(w)w.querySelector('.chart-tip').innerHTML=h.dataset.tip});
+document.addEventListener('pointerover',e=>{const h=e.target.closest&&e.target.closest('.hit');if(!h||e.pointerType==='touch')return;const w=h.closest('.chart-wrap');if(w)w.querySelector('.chart-tip').innerHTML=h.dataset.tip});
+
+function renderProgress(){
+  const body=document.getElementById('history-body');
+  let h=`<div class="prog-tabs">${[['overview','Overview'],['lifts','Lifts'],['history','History']].map(([k,l])=>`<button class="prog-tab ${progTab===k?'active':''}" onclick="setProgTab('${k}')">${l}</button>`).join('')}</div>`;
+  if(!history.length){body.innerHTML=h+'<div class="history-empty">No sessions logged yet</div>';return}
+  if(progTab==='overview')h+=renderOverview();
+  else if(progTab==='lifts')h+=renderLifts();
+  else h+=renderHistory();
+  body.innerHTML=h;
+}
+
+function renderOverview(){
+  const hs=sortedHistory(),t=isoDay(new Date()),curMon=monOf(t);
+  const total=hs.reduce((a,x)=>a+entryVolume(x),0);
+  const days=new Set(hs.map(x=>isoDay(new Date(x.date))));
+  const weeks=[];for(let i=11;i>=0;i--){const wk=addDay(curMon,-7*i);weeks.push({wk,days:new Set(),vol:0})}
+  hs.forEach(x=>{const d=isoDay(new Date(x.date)),W=weeks.find(w=>d>=w.wk&&d<=addDay(w.wk,6));if(W){W.days.add(d);W.vol+=entryVolume(x)}});
+  const thisW=weeks[11],lastW=weeks[10];
+  const pct=lastW.vol?Math.round((thisW.vol-lastW.vol)/lastW.vol*100):null;
+  const series=exerciseSeries(),allPBs=Object.values(series).reduce((a,x)=>a+x.pbs,0);
+  const buses=total/12000;
+  let h=`<div class="tiles">
+    <div class="tile"><span>Sessions</span><b>${days.size}</b><em class="pot-small">since ${niceDay(isoDay(new Date(hs[0].date)))}</em></div>
+    <div class="tile"><span>Total lifted</span><b>${fmtKg(total)}</b><em class="pot-small">${buses>=1?'about '+buses.toFixed(1)+' double-decker buses':Math.round(buses*100)+'% of a double-decker bus'}</em></div>
+    <div class="tile"><span>This week</span><b>${fmtKg(thisW.vol)}</b><em class="${!thisW.vol||pct===null?'pot-small':pct>=0?'pot-pos':'pot-neg'}">${!thisW.vol?'last week: '+fmtKg(lastW.vol):pct===null?'nothing last week':(pct>=0?'▲ ':'▼ ')+Math.abs(pct)+'% vs last week'}</em></div>
+    <div class="tile"><span>PBs set</span><b>${allPBs}</b><em class="pot-small">across ${Object.keys(series).length} exercises</em></div>
+  </div>`;
+  const lab=(w,i)=>i%3===2||i===11?niceDay(w.wk).replace(' ',' '):'';
+  h+=chartBlock('Sessions per week',barChart(weeks.map((w,i)=>({v:w.days.size,label:lab(w,i),current:i===11,tip:`<b>${w.days.size} session${w.days.size===1?'':'s'}</b> <span>w/c ${niceDay(w.wk)}</span>`})),'n'));
+  h+=chartBlock('Weight lifted per week',barChart(weeks.map((w,i)=>({v:Math.round(w.vol),label:lab(w,i),current:i===11,tip:`<b>${fmtKg(w.vol)}</b> <span>w/c ${niceDay(w.wk)}</span>`})),'kg'));
+  const recent=Object.values(series).flatMap(x=>x.pts.filter(p=>p.pb).map(p=>({name:x.name,...p}))).sort((a,b)=>a.d<b.d?1:-1).slice(0,6);
+  if(recent.length){h+=`<div class="pot-card"><div class="pot-card-title">Recent PBs</div>`;
+    recent.forEach(p=>h+=`<div class="pot-row"><span><span class="pot-small">${niceDay(p.d)}</span> &nbsp;${escH(p.name)}</span><b>${p.top.w}kg × ${p.top.r}</b></div>`);h+=`</div>`}
+  return h;
+}
+
+function renderLifts(){
+  const series=exerciseSeries(),list=Object.entries(series).sort((a,b)=>a[1].last<b[1].last?1:-1);
+  if(!list.length)return'<div class="history-empty">No lifts logged yet</div>';
+  if(!progEx||!series[progEx])progEx=list[0][0];
+  const X=series[progEx];
+  let h=`<select class="day-select" style="font-size:14px;padding:10px" onchange="progEx=this.value;renderProgress()">${list.map(([k,x])=>`<option value="${escH(k)}" ${k===progEx?'selected':''}>${escH(x.name)}</option>`).join('')}</select>`;
+  const first=X.pts[0].top,gain=Math.round((X.best.v-first.v)*10)/10;
+  h+=`<div class="tiles">
+    <div class="tile"><span>Best set</span><b>${X.best.w}kg × ${X.best.r}</b><em class="pot-small">≈ ${Math.round(X.best.v)}kg one-rep max</em></div>
+    <div class="tile"><span>Heaviest weight</span><b>${X.heaviest}kg</b><em class="pot-small">any set</em></div>
+    <div class="tile"><span>Since you started</span><b class="${gain>0?'pot-pos':''}">${gain>0?'+':''}${gain}kg</b><em class="pot-small">estimated 1RM</em></div>
+    <div class="tile"><span>Total lifted</span><b>${fmtKg(X.vol)}</b><em class="pot-small">${X.pts.length} session${X.pts.length===1?'':'s'} · ${X.pbs} PB${X.pbs===1?'':'s'}</em></div>
+  </div>`;
+  const pts=X.pts.slice(-24).map(p=>({d:p.d,y:p.top.v,pb:p.pb,tip:`<b>${p.top.w}kg × ${p.top.r}</b> <span>${niceDay(p.d)} · ≈${Math.round(p.top.v)}kg 1RM${p.pb?' · PB':''}</span>`}));
+  h+=chartBlock('Estimated 1RM per session',lineChart(pts),'Filled dots are PBs. Tap one for details');
+  h+=`<div class="pot-card"><div class="pot-card-title">Last sessions</div>`;
+  X.pts.slice(-6).reverse().forEach(p=>h+=`<div class="pot-row" style="align-items:center"><span class="pot-small" style="white-space:nowrap">${niceDay(p.d)}${p.pb?' <span class="badge badge-done">PB</span>':''}</span><span style="display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end">${p.sets.map(s=>`<span class="history-set-pill">${s.w} × ${s.r}</span>`).join('')}</span></div>`);
+  h+=`</div><div class="pot-small" style="padding:0 4px 12px">Estimated 1RM lets a rep PB count as progress too: 80kg × 8 beats 82.5kg × 5.</div>`;
+  return h;
+}
 
 function renderHistory(){
-  const body=document.getElementById('history-body');
-  if(!history.length){body.innerHTML='<div class="history-empty">No sessions logged yet</div>';return}
-  body.innerHTML=[...history].reverse().slice(0,20).map(h=>{
+  return [...history].sort((a,b)=>a.date<b.date?1:-1).slice(0,30).map(h=>{
     const dateStr=new Date(h.date).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
     const exHtml=Object.values(h.ex||{}).map(e=>{
       const pills=e.sets.filter(s=>s.w&&s.r).map(s=>`<div class="history-set-pill">${s.w} × ${s.r}</div>`).join('');
@@ -781,8 +1111,175 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),2200);
 }
 
+// ─── WINTER POT ─────────────────────────────────────────────────────
+// Every saved session pays into a pot. PBs are spotted automatically
+// from logged working sets (best estimated 1RM per exercise).
+const POT_DEFAULTS={perSession:2,minSession:1,weeklyMin:3,weeklyStretch:4,stretchBonus:3,missPenalty:3,pbBonus:5,streakEvery:4,streakBonus:5,goalDate:'2027-03-01',rewardName:'',rewardPrice:100};
+let pot={settings:{...POT_DEFAULTS},start:null,minSessions:[],spends:[]};
+const DAY_MS=864e5;
+const pad2=n=>String(n).padStart(2,'0');
+const isoDay=d=>d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+const parseDay=s=>{const p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2])};
+const addDay=(s,n)=>{const d=parseDay(s);d.setDate(d.getDate()+n);return isoDay(d)};
+const monOf=s=>{const d=parseDay(s);d.setDate(d.getDate()-((d.getDay()+6)%7));return isoDay(d)};
+const daysBetween=(a,b)=>Math.round((parseDay(b)-parseDay(a))/DAY_MS);
+const money=n=>{const a=Math.abs(n);return(n<0?'-':'')+'£'+(a%1?a.toFixed(2):a)};
+const niceDay=s=>parseDay(s).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+const e1rm=(w,r)=>w*(1+r/30);
+const escH=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function loadPot(){
+  try{const p=localStorage.getItem('ajs_pot');if(p){const x=JSON.parse(p);pot={...pot,...x,settings:{...POT_DEFAULTS,...(x.settings||{})}}}}catch(e){}
+  if(!pot.start){pot.start=isoDay(new Date());savePot()}
+}
+function savePot(){try{localStorage.setItem('ajs_pot',JSON.stringify(pot))}catch(e){}}
+
+function computePBs(){
+  const lifts={},awards=[];
+  [...history].sort((a,b)=>a.date<b.date?-1:1).forEach(h=>{
+    const d=isoDay(new Date(h.date));
+    Object.values(h.ex||{}).forEach(e=>{
+      let top=null;
+      (e.sets||[]).forEach(s=>{
+        if(s.t==='Warm up'||s.t==='Cardio')return;
+        const w=parseFloat(s.w),r=parseInt(s.r,10);
+        if(!(w>0)||!(r>0)||r>30)return;
+        const v=e1rm(w,r);if(!top||v>top.v)top={w,r,v};
+      });
+      if(!top)return;
+      const k=e.name.trim().toLowerCase();
+      const L=lifts[k]||(lifts[k]={name:e.name,first:top,best:null,count:0});
+      if(L.best&&top.v>L.best.v+0.01&&d>=pot.start){awards.push({d,name:e.name,w:top.w,r:top.r});L.count++}
+      if(!L.best||top.v>L.best.v)L.best=top;
+    });
+  });
+  return{lifts,awards};
+}
+
+function derivePot(){
+  const s=pot.settings,t=isoDay(new Date()),curMon=monOf(t),startMon=monOf(pot.start);
+  const byDay={};
+  history.forEach(h=>{if(!Object.keys(h.ex||{}).length)return;const d=isoDay(new Date(h.date));if(d>=pot.start)byDay[d]='full'});
+  pot.minSessions.forEach(d=>{if(!byDay[d]&&d>=pot.start)byDay[d]='min'});
+  const sess=Object.keys(byDay).sort().map(d=>({d,t:byDay[d]}));
+  const ledger=[],weeks=[];let streak=0,best=0;
+  for(let wk=startMon;wk<=curMon;wk=addDay(wk,7)){
+    const end=addDay(wk,6),ws=sess.filter(x=>x.d>=wk&&x.d<=end);
+    let earned=0;
+    ws.forEach(x=>{const v=x.t==='min'?s.minSession:s.perSession;earned+=v;ledger.push({d:x.d,a:v,l:x.t==='min'?'Bare minimum session':'Session'})});
+    const c=ws.length,complete=wk<curMon,hit=c>=s.weeklyMin;let status='pending';
+    if(c>=s.weeklyStretch&&s.stretchBonus){earned+=s.stretchBonus;ledger.push({d:ws[s.weeklyStretch-1].d,a:s.stretchBonus,l:'Bonus: '+s.weeklyStretch+' in a week'})}
+    if(hit){streak++;status='hit';if(s.streakEvery&&streak%s.streakEvery===0&&s.streakBonus){earned+=s.streakBonus;ledger.push({d:ws[s.weeklyMin-1].d,a:s.streakBonus,l:'Bonus: '+streak+' week chain'})}}
+    else if(complete){if(wk===startMon)status='start';else{status='miss';streak=0;if(s.missPenalty){earned-=s.missPenalty;ledger.push({d:end,a:-s.missPenalty,l:'Missed the weekly minimum'})}}}
+    best=Math.max(best,streak);weeks.push({wk,c,earned,status});
+  }
+  const pb=computePBs();
+  pb.awards.forEach(a=>ledger.push({d:a.d,a:s.pbBonus,l:'PB: '+a.name+' '+a.w+'kg × '+a.r}));
+  pot.spends.forEach(x=>ledger.push({d:x.d,a:-x.amt,l:'Spent: '+x.note}));
+  const total=ledger.reduce((a,x)=>a+x.a,0);
+  ledger.sort((a,b)=>a.d<b.d?1:-1);
+  const goalDays=Math.max(7,daysBetween(startMon,s.goalDate)),totalWeeks=goalDays/7;
+  const done=sess.filter(x=>x.d<=s.goalDate).length;
+  const elapsed=Math.min(goalDays,daysBetween(startMon,t)+1);
+  const daysLeft=Math.max(0,daysBetween(t,s.goalDate));
+  const thisWeek=weeks[weeks.length-1]||{c:0};
+  const proj=total+Math.max(0,s.weeklyMin-thisWeek.c)*s.perSession+Math.max(0,daysLeft/7-1)*s.weeklyMin*s.perSession;
+  return{t,curMon,byDay,ledger,weeks,streak,best,pot:total,pbCount:pb.awards.length,lifts:pb.lifts,
+    target:Math.round(totalWeeks*s.weeklyMin),stretchT:Math.round(totalWeeks*s.weeklyStretch),done,
+    diff:Math.round(done-elapsed/7*s.weeklyMin),daysLeft,thisWeek,proj:Math.round(proj)};
+}
+
+function potNudge(D){
+  const s=pot.settings,c=D.thisWeek.c,dayIdx=daysBetween(D.curMon,D.t),loggedToday=!!D.byDay[D.t];
+  const left=7-dayIdx-(loggedToday?1:0);
+  if(c>=s.weeklyStretch)return s.weeklyStretch+' done. Bonus banked. Anything else is pure profit.';
+  if(c>=s.weeklyMin)return 'Chain safe. One more for the '+money(s.stretchBonus)+' bonus.';
+  const need=s.weeklyMin-c;
+  if(need>left)return 'Minimum is out of reach this week. Every session still pays, so get what you can.';
+  if(need===left)return 'No slack left: '+need+' more in '+left+' day'+(left>1?'s':'')+' or the chain breaks.';
+  return need+' more this week keeps the chain alive. '+left+' days to do it.';
+}
+
+function potDots(D,cls){
+  return ['M','T','W','T','F','S','S'].map((n,i)=>{
+    const d=addDay(D.curMon,i),x=D.byDay[d];
+    return `<div class="${cls} ${x||''} ${d===D.t?'today':''} ${d>D.t?'future':''}">${x==='full'?'✓':x==='min'?'½':n}</div>`;
+  }).join('');
+}
+
+function renderPotStrip(){
+  const D=derivePot(),s=pot.settings;
+  document.getElementById('hdr-pot').textContent=money(D.pot);
+  document.getElementById('pot-strip').innerHTML=`
+    <div class="pot-strip-top"><div class="pot-dots">${potDots(D,'pot-dot')}</div>
+    <div class="pot-count">${D.thisWeek.c}<span> / ${s.weeklyMin} this week</span></div></div>
+    <div class="pot-nudge">${escH(potNudge(D))}</div>`;
+}
+
+function openPot(){document.getElementById('pot-overlay').classList.add('open');renderPot()}
+function closePot(){document.getElementById('pot-overlay').classList.remove('open')}
+
+function renderPot(){
+  const D=derivePot(),s=pot.settings;let h='';
+  h+=`<div class="pot-card"><div class="pot-card-title">In the pot</div><div class="pot-big">${money(D.pot)}</div>`;
+  if(s.rewardName){const pct=Math.max(0,Math.min(100,D.pot/s.rewardPrice*100));
+    h+=`<div class="pot-bar"><i style="width:${pct}%"></i></div><div class="pot-small">${money(Math.max(0,D.pot))} of ${money(s.rewardPrice)} towards <b style="color:var(--text)">${escH(s.rewardName)}</b>${D.pot>=s.rewardPrice?' · <span class="pot-pos">go and buy it</span>':''}</div>`;
+  }else h+=`<div class="pot-small">Pick what this pot is for in the settings below.</div>`;
+  h+=`<div class="pot-small" style="margin-top:6px">Stick to ${s.weeklyMin} a week and you'll have about ${money(D.proj)} by ${niceDay(s.goalDate)}.</div>`;
+  if(!D.byDay[D.t])h+=`<button class="pot-min-btn" onclick="logMinimum()">Bare minimum today (20 mins) · +${money(s.minSession)}</button>`;
+  else if(D.byDay[D.t]==='min')h+=`<button class="pot-min-btn" onclick="undoMinimum()">Undo today's bare minimum</button>`;
+  h+=`</div>`;
+  h+=`<div class="pot-card"><div class="pot-card-title">This week · chain ${D.streak} week${D.streak===1?'':'s'}</div><div class="pot-dots" style="justify-content:space-between">${potDots(D,'pot-dot')}</div><div class="pot-nudge" style="font-size:13px;color:var(--text)">${escH(potNudge(D))}</div>
+    <div class="pot-small" style="margin-top:8px">${money(s.perSession)} a session · ${money(s.stretchBonus)} for ${s.weeklyStretch} in a week · ${money(s.pbBonus)} per PB · lose ${money(s.missPenalty)} if you miss ${s.weeklyMin}</div></div>`;
+  const gp=D.target?Math.min(100,D.done/D.target*100):0;
+  h+=`<div class="pot-card"><div class="pot-card-title">Winter goal</div><div class="pot-bar"><i style="width:${gp}%"></i></div>
+    <div class="pot-small">${D.done} of ${D.target} sessions by ${niceDay(s.goalDate)} (stretch: ${D.stretchT})</div>
+    <div class="pot-stats"><div><b>${D.daysLeft}</b><span>days left</span></div><div><b class="${D.diff>=0?'pot-pos':'pot-neg'}">${D.diff>0?'+':''}${D.diff}</b><span>${D.diff>=0?'ahead':'behind'}</span></div><div><b>${D.best}</b><span>best chain</span></div></div></div>`;
+  const lifts=Object.values(D.lifts).filter(L=>L.best).sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name));
+  h+=`<div class="pot-card"><div class="pot-card-title">Bests · ${money(s.pbBonus)} each new PB</div>`;
+  if(!lifts.length)h+=`<div class="pot-small">Log a session and your bests appear here. Beat any of them (more weight, or more reps at the same weight) and it pays.</div>`;
+  lifts.forEach(L=>{const g=Math.round((L.best.v-L.first.v)*10)/10;
+    h+=`<div class="pot-row"><span>${escH(L.name)}${L.count?` <span class="badge badge-done">${L.count} PB${L.count>1?'s':''}</span>`:''}</span><span><b>${L.best.w}kg × ${L.best.r}</b>${g>0?` <span class="pot-pos" style="font-size:11px">+${g}kg e1RM</span>`:''}</span></div>`});
+  h+=`</div>`;
+  h+=`<div class="pot-card"><div class="pot-card-title">Where the money came from</div>`;
+  if(!D.ledger.length)h+=`<div class="pot-small">Nothing yet. Your next saved session pays ${money(s.perSession)}.</div>`;
+  D.ledger.slice(0,12).forEach(x=>{h+=`<div class="pot-row"><span><span class="pot-small">${niceDay(x.d)}</span> &nbsp;${escH(x.l)}</span><span class="${x.a>=0?'pot-pos':'pot-neg'}">${x.a>0?'+':''}${money(x.a)}</span></div>`});
+  h+=`</div>`;
+  const fields=[['perSession','£ per session'],['minSession','£ per bare minimum'],['weeklyMin','Weekly minimum'],['weeklyStretch','Weekly stretch'],['stretchBonus','£ stretch bonus'],['missPenalty','£ lost per missed week'],['pbBonus','£ per PB'],['streakBonus','£ chain bonus'],['streakEvery','Chain bonus every N weeks']];
+  h+=`<div class="pot-card"><div class="pot-card-title">Pot settings</div><div class="pot-grid">
+    <div><label>Reward</label><input id="pot-rname" value="${escH(s.rewardName)}" placeholder="e.g. new trainers"></div>
+    <div><label>Reward price £</label><input id="pot-rprice" type="number" value="${s.rewardPrice}"></div>
+    ${fields.map(f=>`<div><label>${f[1]}</label><input type="number" step="0.5" data-pk="${f[0]}" value="${s[f[0]]}"></div>`).join('')}
+    <div><label>Goal date</label><input id="pot-goal" type="date" value="${s.goalDate}"></div></div>
+    <button class="pot-save" onclick="savePotSettings()">Save pot settings</button></div>`;
+  h+=`<div class="pot-card"><div class="pot-card-title">Spend from the pot</div><div class="pot-grid">
+    <div><label>Amount £</label><input id="pot-spend-amt" type="number"></div><div><label>On what?</label><input id="pot-spend-note"></div></div>
+    <button class="pot-save" style="background:none;border:1px solid var(--border-strong);color:var(--text-muted)" onclick="spendPot()">Take it out</button></div>`;
+  document.getElementById('pot-body').innerHTML=h;
+}
+
+function refreshPot(){savePot();renderHeader();if(document.getElementById('pot-overlay').classList.contains('open'))renderPot()}
+function logMinimum(){const t=isoDay(new Date());if(!pot.minSessions.includes(t))pot.minSessions.push(t);refreshPot();showToast('Bare minimum logged · +'+money(pot.settings.minSession))}
+function undoMinimum(){const t=isoDay(new Date());pot.minSessions=pot.minSessions.filter(d=>d!==t);refreshPot()}
+function savePotSettings(){
+  const s=pot.settings;
+  document.querySelectorAll('[data-pk]').forEach(el=>{const v=parseFloat(el.value);if(!isNaN(v)&&v>=0)s[el.dataset.pk]=v});
+  s.weeklyMin=Math.max(1,Math.round(s.weeklyMin));s.weeklyStretch=Math.max(s.weeklyMin,Math.round(s.weeklyStretch));s.streakEvery=Math.round(s.streakEvery);
+  s.rewardName=document.getElementById('pot-rname').value.trim();
+  const rp=parseFloat(document.getElementById('pot-rprice').value);if(rp>0)s.rewardPrice=rp;
+  const g=document.getElementById('pot-goal').value;if(g)s.goalDate=g;
+  refreshPot();showToast('Pot settings saved');
+}
+function spendPot(){
+  const a=parseFloat(document.getElementById('pot-spend-amt').value);
+  if(!(a>0)){showToast('How much are you taking out?');return}
+  pot.spends.push({d:isoDay(new Date()),amt:a,note:document.getElementById('pot-spend-note').value.trim()||'treat'});
+  refreshPot();showToast('Enjoy it');
+}
+
 // ─── INIT ────────────────────────────────────────────────────────────
 load();
+loadPot();
 applySettings();
 setTimeout(()=>{
   document.getElementById('splash').classList.add('hidden');
