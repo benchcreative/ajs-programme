@@ -9,6 +9,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Programme">
 <meta name="theme-color" content="#080808">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,700;1,800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -219,6 +222,17 @@
   .pot-grid label{display:block;font-size:11px;color:var(--text-muted);margin-bottom:4px}
   .pot-grid input,.pot-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 10px;font-size:14px;font-family:'Barlow',sans-serif;color:var(--text)}
   .pot-grid input:focus,.pot-input:focus{outline:none;border-color:var(--accent)}
+  /* INSTALL BANNER */
+  .install{margin:14px 16px 0;padding:12px;background:var(--surface);border:1px solid var(--accent);border-radius:var(--radius-lg);display:none;align-items:center;gap:12px}
+  .install.show{display:flex}
+  .install img{width:52px;height:52px;border-radius:12px;flex-shrink:0}
+  .install-txt{flex:1;min-width:0}
+  .install-title{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;font-style:italic;text-transform:uppercase;line-height:1.1}
+  .install-sub{font-size:12px;color:var(--text-muted);margin-top:3px;line-height:1.35}
+  .install-sub b{color:var(--text)}
+  .install-add{background:var(--accent);color:var(--black);border:0;border-radius:8px;padding:9px 14px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;text-transform:uppercase;cursor:pointer}
+  .install-x{background:none;border:0;color:var(--text-dim);font-size:16px;cursor:pointer;padding:4px;align-self:flex-start}
+
   /* REST TIMER */
   .rest{position:fixed;left:12px;right:12px;bottom:76px;z-index:150;background:var(--surface2);border:1px solid var(--border-strong);border-radius:var(--radius-lg);padding:10px 12px;display:none;align-items:center;gap:10px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
   .rest.show{display:flex}
@@ -283,6 +297,16 @@
       </div>
     </div>
     <div class="day-tabs" id="day-tabs"></div>
+  </div>
+
+  <div class="install" id="install">
+    <img src="apple-touch-icon.png" alt="">
+    <div class="install-txt">
+      <div class="install-title">Add to home screen</div>
+      <div class="install-sub" id="install-sub">Opens full screen like a proper app.</div>
+    </div>
+    <button class="install-add" id="install-add" style="display:none" onclick="installApp()">Add</button>
+    <button class="install-x" onclick="dismissInstall()" aria-label="Dismiss">✕</button>
   </div>
 
   <div class="pot-strip" id="pot-strip" onclick="openPot()"></div>
@@ -1277,6 +1301,27 @@ function spendPot(){
   refreshPot();showToast('Enjoy it');
 }
 
+// ─── ADD TO HOME SCREEN ─────────────────────────────────────────────
+// Android/Chrome: real "Add" button. iPhone: Apple doesn't allow a button,
+// so the banner shows the two taps instead. Hidden once installed or dismissed.
+let installEvt=null;
+const isStandalone=()=>window.navigator.standalone===true||window.matchMedia('(display-mode: standalone)').matches;
+const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function showInstall(){
+  let dismissed=false;try{dismissed=localStorage.getItem('ajs_install_dismissed')==='1'}catch(e){}
+  if(isStandalone()||dismissed)return;
+  const sub=document.getElementById('install-sub'),btn=document.getElementById('install-add');
+  if(installEvt){sub.textContent='Opens full screen like a proper app, with your own icon.';btn.style.display=''}
+  else if(isIOS()){sub.innerHTML='Tap <b>Share</b> <svg width="12" height="14" viewBox="0 0 12 15" style="vertical-align:-2px" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 1v9M3 4l3-3 3 3M4 6.5H2v7.5h8V6.5H8"/></svg> in Safari, then <b>Add to Home Screen</b>.'}
+  else return;
+  document.getElementById('install').classList.add('show');
+}
+function installApp(){if(!installEvt)return;installEvt.prompt();installEvt.userChoice.finally(()=>{installEvt=null;document.getElementById('install').classList.remove('show')})}
+function dismissInstall(){try{localStorage.setItem('ajs_install_dismissed','1')}catch(e){}document.getElementById('install').classList.remove('show')}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;showInstall()});
+window.addEventListener('appinstalled',()=>document.getElementById('install').classList.remove('show'));
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+
 // ─── INIT ────────────────────────────────────────────────────────────
 load();
 loadPot();
@@ -1284,7 +1329,7 @@ applySettings();
 setTimeout(()=>{
   document.getElementById('splash').classList.add('hidden');
   document.getElementById('app').classList.add('visible');
-  renderTabs();renderHeader();renderSession();
+  renderTabs();renderHeader();renderSession();showInstall();
 },1400);
 
 // Update lib exercises when day changes
